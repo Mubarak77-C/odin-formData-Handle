@@ -1,26 +1,14 @@
-// controllers/usersController.js
-const usersStorage = require("../storages/usersStorage");
-const { body, validationResult } = require("express-validator");
+// Add these to controllers/usersController.js
 
-exports.usersListGet = (req, res) => {
-  const searchQuery = req.query.search || "";
-  const users = usersStorage.findUsers(searchQuery);
-
-  res.render("index", {
-    title: "User List",
-    users: users,
-    searchQuery: searchQuery,
+exports.usersUpdateGet = (req, res) => {
+  const user = usersStorage.getUser(req.params.id);
+  res.render("updateUser", {
+    title: "Update User",
+    user: user,
   });
 };
 
-exports.usersCreateGet = (req, res) => {
-  res.render("createUser", {
-    title: "Create User",
-  });
-};
-
-// Combined validation array + controller handler function
-exports.usersCreatePost = [
+exports.usersUpdatePost = [
   body("firstName")
     .trim()
     .isLength({ min: 1, max: 20 })
@@ -39,17 +27,28 @@ exports.usersCreatePost = [
     .isLength({ max: 200 })
     .withMessage("Bio cannot exceed 200 characters."),
 
-  // Final handler callback
   (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).render("createUser", {
-        title: "Create User",
+      return res.status(400).render("updateUser", {
+        title: "Update User",
+        user: { id: req.params.id, ...req.body },
         errors: errors.array(),
       });
     }
     const { firstName, lastName, email, age, bio } = req.body;
-    usersStorage.addUser({ firstName, lastName, email, age, bio });
+    usersStorage.updateUser(req.params.id, {
+      firstName,
+      lastName,
+      email,
+      age,
+      bio,
+    });
     res.redirect("/");
   },
 ];
+
+exports.usersDeletePost = (req, res) => {
+  usersStorage.deleteUser(req.params.id);
+  res.redirect("/");
+};

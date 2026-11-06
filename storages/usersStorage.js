@@ -14,7 +14,19 @@ class UsersStorage {
     return Object.values(this.storage);
   }
 
-  // NEW: Search filter method
+  getUser(id) {
+    return this.storage[id];
+  }
+
+  updateUser(id, { firstName, lastName, email, age, bio }) {
+    this.storage[id] = { id, firstName, lastName, email, age, bio };
+  }
+
+  // THIS IS THE METHOD THAT WAS MISSING
+  deleteUser(id) {
+    delete this.storage[id];
+  }
+
   findUsers(searchQuery) {
     const users = this.getUsers();
     if (!searchQuery) return users;
@@ -27,8 +39,7 @@ class UsersStorage {
         user.email.toLowerCase().includes(query),
     );
   }
-
-  // ... (keep getUser, updateUser, deleteUser as they are)
 }
 
+// Export a single instance (Singleton pattern)
 module.exports = new UsersStorage();

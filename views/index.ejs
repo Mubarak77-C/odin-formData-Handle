@@ -5,14 +5,33 @@
 </head>
 <body>
   <h1>User Management Dashboard</h1>
+  
   <a href="/create">Create New User</a>
+  <br><br>
+
+  <!-- NEW: Search Form using GET method -->
+  <form action="/" method="GET">
+    <input 
+      type="text" 
+      name="search" 
+      placeholder="Search by name or email..." 
+      value="<%= locals.searchQuery || '' %>" 
+    />
+    <button type="submit">Search</button>
+    <% if (locals.searchQuery) { %>
+      <a href="/">Clear Filter</a>
+    <% } %>
+  </form>
+
+  <hr>
+
   <ul>
     <% if (users.length > 0) { %>
       <% users.forEach(user => { %>
         <li>ID: <%= user.id %> | Name: <%= user.firstName %> <%= user.lastName %> | Email: <%= user.email %></li>
       <% }) %>
     <% } else { %>
-      <p>No users found.</p>
+      <p>No matching users found.</p>
     <% } %>
   </ul>
 </body>

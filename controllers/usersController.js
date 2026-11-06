@@ -1,24 +1,20 @@
 // controllers/usersController.js
 const usersStorage = require("../storages/usersStorage");
-const { body, validationResult } = require("express-validator"); // <--- THIS LINE IS REQUIRED
+const { body, validationResult } = require("express-validator");
 
-exports.usersListGet = (req, res) => {
+// Renders index with form, list, and search
+exports.usersIndexGet = (req, res) => {
   const searchQuery = req.query.search || "";
   const users = usersStorage.findUsers(searchQuery);
 
   res.render("index", {
-    title: "User List",
+    title: "User Management Dashboard",
     users: users,
     searchQuery: searchQuery,
   });
 };
 
-exports.usersCreateGet = (req, res) => {
-  res.render("createUser", {
-    title: "Create User",
-  });
-};
-
+// Handles creation directly from the home page form
 exports.usersCreatePost = [
   body("firstName")
     .trim()
@@ -41,8 +37,10 @@ exports.usersCreatePost = [
   (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).render("createUser", {
-        title: "Create User",
+      return res.status(400).render("index", {
+        title: "User Management Dashboard",
+        users: usersStorage.getUsers(),
+        searchQuery: "",
         errors: errors.array(),
       });
     }

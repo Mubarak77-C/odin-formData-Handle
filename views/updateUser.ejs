@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+</head>
+<body>
+  <h1>Update User</h1>
+
+  <% if (locals.errors) { %>
+    <ul>
+      <% errors.forEach(error => { %>
+        <li style="color: red;"><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <form action="/<%= user.id %>/update" method="POST">
+    <div>
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" name="firstName" value="<%= user.firstName %>" required />
+    </div>
+    <div>
+      <label for="lastName">Last Name:</label>
+      <input type="text" id="lastName" name="lastName" value="<%= user.lastName %>" required />
+    </div>
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" value="<%= user.email %>" required />
+    </div>
+    <div>
+      <label for="age">Age:</label>
+      <input type="number" id="age" name="age" value="<%= user.age || '' %>" />
+    </div>
+    <div>
+      <label for="bio">Bio:</label>
+      <textarea id="bio" name="bio"><%= user.bio || '' %></textarea>
+    </div>
+    <button type="submit">Update User</button>
+  </form>
+  <br>
+  <a href="/">Cancel</a>
+</body>
+</html>

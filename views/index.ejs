@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+</head>
+<body>
+  <h1>User Management Dashboard</h1>
+  <a href="/create">Create New User</a>
+  <ul>
+    <% if (users.length > 0) { %>
+      <% users.forEach(user => { %>
+        <li>ID: <%= user.id %> | Name: <%= user.firstName %> <%= user.lastName %> | Email: <%= user.email %></li>
+      <% }) %>
+    <% } else { %>
+      <p>No users found.</p>
+    <% } %>
+  </ul>
+</body>
+</html>

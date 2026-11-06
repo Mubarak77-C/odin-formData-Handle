@@ -1,3 +1,4 @@
+// storages/usersStorage.js
 class UsersStorage {
   constructor() {
     this.storage = {};
@@ -13,18 +14,21 @@ class UsersStorage {
     return Object.values(this.storage);
   }
 
-  getUser(id) {
-    return this.storage[id];
+  // NEW: Search filter method
+  findUsers(searchQuery) {
+    const users = this.getUsers();
+    if (!searchQuery) return users;
+
+    const query = searchQuery.toLowerCase();
+    return users.filter(
+      (user) =>
+        user.firstName.toLowerCase().includes(query) ||
+        user.lastName.toLowerCase().includes(query) ||
+        user.email.toLowerCase().includes(query),
+    );
   }
 
-  updateUser(id, { firstName, lastName, email, age, bio }) {
-    this.storage[id] = { id, firstName, lastName, email, age, bio };
-  }
-
-  deleteUser(id) {
-    delete this.storage[id];
-  }
+  // ... (keep getUser, updateUser, deleteUser as they are)
 }
 
-// Export a single instance of the class (Singleton pattern)
 module.exports = new UsersStorage();
